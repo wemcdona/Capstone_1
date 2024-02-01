@@ -1,0 +1,1 @@
+https://kitsu.docs.apiary.io/#reference/anime
