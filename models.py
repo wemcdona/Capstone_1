@@ -19,7 +19,7 @@ class Anime (db.Model):
     title = db.Column(db.Text, nullable=False,)
     genre = db.Column(db.Text,)
     episode_count = db.Column(db.Integer, nullable=False,)
-    rating = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
 
 class Episode(db.Model):
     """List of episodes for an anime."""
