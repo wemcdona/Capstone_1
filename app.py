@@ -1,12 +1,12 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import pdb
 
 from forms import UserAddForm, LoginForm, UserEditForm
-from models import db, connect_db, User, Anime, Episode 
+from models import db, connect_db, User, Userlist, Anime, Episode
 
 CURR_USER_KEY = "curr_user"
 
@@ -18,6 +18,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/crunchylist'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
+app.config['SECRET_KEY'] = 'neededForPythonDebugToolbar'
 
 connect_db(app)
 
@@ -25,15 +26,9 @@ DebugToolbarExtension(app)
 
 # Define routes
 
-@app.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
-
-    if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
-
-    else:
-        g.user = None
+# @app.before_request
+def get_current_user():
+    return User.query.get(session[CURR_USER_KEY])
 
 def do_login(user):
     """Log in user."""
@@ -66,14 +61,15 @@ def signup():
 
         except IntegrityError:
             flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            return render_template('signup.html', form=form)
         
         do_login(user)
         
         return redirect("/")
     
     else:
-        return render_template('users/signup.html', form=form)
+        # TODO: Fix this by fixing path to the template html file
+        return render_template('/signup.html', form=form)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -89,9 +85,9 @@ def login():
             flash(f"Hello, {user.username}!", "success")
             return redirect("/")
         
-        flash("Invalid credentials.", 'danger')
-
-    return render_template('users/login.html', form=form)
+        flash("Invalid username or password.", 'danger')
+# TODO: Fix this by fixing path to the template html file
+    return render_template('/login.html', form=form)
 
 @app.route('/logout')
 def logout():
@@ -115,6 +111,28 @@ def list_users():
 
     return render_template('users/index.html', users=users)
 
+@app.route('/users/<int:user_id>/anime', methods=['POST'])
+def add_anime(user_id):
+    """Add anime to user's list."""
+    user = User.query.get_or_404(user_id)
+    anime_id = request.form.get('anime_id')
+    anime = Anime.query.get(anime_id)
+    userlist = Userlist(user=user, anime=anime)
+    db.session.add(userlist)
+    db.session.commit()
+    return redirect(f'/users/{user_id}')
+
+@app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
+def delete_anime(user_id, anime_id):
+    """Delete anime from user's list."""
+    user = User.query.get_or_404(user_id)
+    anime = Anime.query.get_or_404(anime_id)
+    userlist = Userlist.query.filter(Userlist.user == user.id, Userlist.anime == anime.id)
+    db.session.delete(userlist)
+    db.session.commit()
+    return redirect(f'/users/{user_id}')
+
+
 @app.route('/users/<int:user_id>')
 def users_show(user_id):
     """Show user profile. Display user list."""
@@ -127,10 +145,10 @@ def users_show(user_id):
 def edit_profile():
     """Update profile for current user."""
 
-    if not g.user:
+    if not get_current_user:
         flash("Access unauthorized", "danger")
 
-    user = g.user
+    user = get_current_user
     form = UserEditForm(obj=user)
 
     if form.validate_on_submit():
@@ -150,13 +168,13 @@ def edit_profile():
 def delete_user():
     """Delete user."""
 
-    if not g.user:
+    if not get_current_user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
     
     do_logout()
 
-    db.session.delete(g.user)
+    db.session.delete(get_current_user)
     db.session.commit()
 
     return redirect("/signup")
@@ -168,7 +186,8 @@ def homepage():
     anon users: show home page with options to log in.
     logged in: display user's personal anime list."""
 
-    return render_template('home.html')
+    all_anime = Anime.query.all()
+    return render_template('home.html', all_anime=all_anime)
 
 
 # Add error handling for database operations
@@ -180,6 +199,5 @@ def handle_integerity_error(e):
     flash('An error occurred. Please try again.', 'danger')
     return redirect('/')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
-

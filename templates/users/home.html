@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Crunchylist</h1>
+    <div class="row">
+
+        <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+            <div class="card user-card">
+            <a href="/users/{{ get_current_user.user.id }}" class="card-link">
+                <img src="{{ get_current_user.user.image_url }}" alt="Image for {{ get_current_user.user.username }}" class="card-image">
+                <p>@{{ get_current_user.user.username }}</p>
+            </a>
+            </div>
+        </aside>
+        <div>
+            <h3>Pick Your Anime!</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all"></th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Episode Count</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for anime in anime %}
+                    <tr>
+                        <td><input type="checkbox" name="anime-{{ anime.id }}" value="{{ anime.id }}"></td>
+                        <td>{{ anime.title }}</td>
+                        <td>{{ anime.genre }}</td>
+                        <td>{{ anime.episode_count }}</td>
+                        <td>{{ anime.rating }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <form method="POST" action="{{ url_for('add_anime_to_list') }}">
+                    {% for anime in anime %}
+                        <div class="form-check">
+                            <input type="checkbox" name="anime" class="form-check-input" value="{{ anime.id }}">
+                            <label for="anime-{{ anime.id }}" class="form-check-label">{{ anime.title }}</label>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Add Selected Anime</button>
+                </form>
+            </table>
+        </div>
+    </div>
+{% endblock %}
