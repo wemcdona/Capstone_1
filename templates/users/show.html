@@ -1,3 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>My Anime</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Episode Count</th>
+                        <th>Rating</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for anime in user.anime %}
+                    <tr>
+                        <td>{{ anime.title }}</td>
+                        <td>{{ anime.genre }}</td>
+                        <td>{{ anime.episode_count }}</td>
+                        <td>{{ anime.rating }}</td>
+                        <td><a href="{{ url_for('remove_anime', anime_id=anime.id) }}" class="btn btn-danger">Remove</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import pdb
@@ -120,17 +120,18 @@ def add_anime(user_id):
     userlist = Userlist(user=user, anime=anime)
     db.session.add(userlist)
     db.session.commit()
-    return redirect(f'/users/{user_id}')
+    return redirect(f'/users/home/{user_id}')
 
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
 def delete_anime(user_id, anime_id):
     """Delete anime from user's list."""
     user = User.query.get_or_404(user_id)
     anime = Anime.query.get_or_404(anime_id)
-    userlist = Userlist.query.filter(Userlist.user == user.id, Userlist.anime == anime.id)
+    userlist = Userlist.query.filter(Userlist.user == user.id, Userlist.anime == anime.id).first()
     db.session.delete(userlist)
     db.session.commit()
-    return redirect(f'/users/{user_id}')
+
+    return redirect(url_for('users.show', user_id=user_id))
 
 
 @app.route('/users/<int:user_id>')

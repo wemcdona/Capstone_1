@@ -12,6 +12,9 @@
             </div>
         </aside>
         <div>
+            <a href="{{ url_for('users.show', user_id=get_current_user.user.id) }}">My Anime</a>
+        </div>
+        <div>
             <h3>Pick Your Anime!</h3>
             <table class="table">
                 <thead>
@@ -34,16 +37,16 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <form method="POST" action="{{ url_for('add_anime_to_list') }}">
-                    {% for anime in anime %}
-                        <div class="form-check">
-                            <input type="checkbox" name="anime" class="form-check-input" value="{{ anime.id }}">
-                            <label for="anime-{{ anime.id }}" class="form-check-label">{{ anime.title }}</label>
-                        </div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-primary">Add Selected Anime</button>
-                </form>
             </table>
         </div>
+        <form method="POST" action="{{ url_for('add_anime') }}">
+            {% for anime in anime %}
+                <div class="form-check">
+                    <input type="checkbox" name="anime" class="form-check-input" value="{{ anime.id }}">
+                    <label for="anime-{{ anime.id }}" class="form-check-label">{{ anime.title }}</label>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Add Selected Anime</button>
+        </form>
     </div>
 {% endblock %}

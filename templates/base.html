@@ -42,7 +42,7 @@
       <li><a href="/login">Log in</a></li>
       {% else %}
       <li>
-        <a href="/users/{{ get_current_user.id }}">
+        <a href="/users/home/{{ get_current_user.id }}">
           <img src="{{ get_current_user.image_url }}" alt="{{ get_current_user.username }}">
         </a>
       </li>
