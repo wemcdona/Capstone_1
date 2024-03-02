@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 app.app_context().push()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/crunchylist'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://admin:password@localhost/crunchylist'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True

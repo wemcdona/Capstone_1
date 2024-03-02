@@ -1,0 +1,55 @@
+/* body {
+    background-color: black;
+    color: white;
+} */
+
+button {
+    background-color: blue;
+    color: white;
+    border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+}
+
+button:active {
+    background-color: darkblue;
+}
+
+a {
+    color: blue;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    background-color: lightgrey;
+    border-collapse: collapse;
+}
+
+th, td{
+    border: 1px solid black;
+    padding: 8px;
+}
+
+th {
+    font-weight: bold;
+    text-align: center;
+}
+
+td {
+    text-align: left;
+}
+
+.banner {
+    background-image: url('../images/crunchylist_banner.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100px;
+    position: relative;
+    font-family: 'Looney', sans-serif;
+    color: rgba(255, 0, 255, 0.5);
+    text-shadow: 1px 1px 2px red, 0 0 1em black;
+}
