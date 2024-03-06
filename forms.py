@@ -9,7 +9,6 @@ class UserAddForm(FlaskForm):
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
     image_url = StringField('(Optional) Image URL')
-    submit = SubmitField('Add User')
 
 class UserEditForm(FlaskForm):
     """Form for editing users."""
