@@ -83,7 +83,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect("/")
+            return redirect("/users/home/{user_id}")
         
         flash("Invalid username or password.", 'danger')
 # TODO: Fix this by fixing path to the template html file
@@ -98,18 +98,6 @@ def logout():
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
 
-@app.route('/users')
-def list_users():
-    """Page with listing of users."""
-
-    search = request.args.get('q')
-
-    if not search:
-        users = User.query.all()
-    else:
-        users = User.query.filter(User.username.like(f"%{search}%")).all()
-
-    return render_template('users/index.html', users=users)
 
 @app.route('/users/<int:user_id>/anime', methods=['POST'])
 def add_anime(user_id):
@@ -188,7 +176,7 @@ def homepage():
     logged in: display user's personal anime list."""
 
     all_anime = Anime.query.all()
-    return render_template('home.html', all_anime=all_anime)
+    return render_template('home-anon.html', all_anime=all_anime)
 
 
 # Add error handling for database operations
