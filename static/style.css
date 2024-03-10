@@ -1,7 +1,6 @@
-/* body {
-    background-color: black;
-    color: white;
-} */
+body {
+    background-color: lightgoldenrodyellow;
+}
 
 button {
     background-color: blue;
@@ -44,8 +43,6 @@ td {
 }
 
 .banner {
-    background-image: url('../images/crunchylist_banner.jpeg');
-    background-repeat: no-repeat;
     background-size: cover;
     height: 100px;
     position: relative;
