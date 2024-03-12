@@ -1,5 +1,8 @@
 body {
-    background-color: lightgoldenrodyellow;
+    background-color: orangered;
+    font-family: 'Looney', sans-serif;
+    color: orange;
+    text-shadow: 0 0 5px blue;
 }
 
 button {
@@ -44,9 +47,11 @@ td {
 
 .banner {
     background-size: cover;
-    height: 100px;
+    height: 200px;
     position: relative;
     font-family: 'Looney', sans-serif;
-    color: rgba(255, 0, 255, 0.5);
-    text-shadow: 1px 1px 2px red, 0 0 1em black;
+    font-size: 50px;
+    color: orange;
+    text-shadow: 0 0 5px blue;
+    text-align: center;
 }
