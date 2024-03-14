@@ -83,6 +83,8 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
+            # TODO: Fix this by fixing path to the template html file
+            # TODO: Fix the string concatenation
             return redirect("/users/home/{user_id}")
         
         flash("Invalid username or password.", 'danger')
@@ -98,6 +100,11 @@ def logout():
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
 
+
+@app.route('/users/home/<int:user_id>')
+def users_home(user_id):
+    # TODO:  Fill this out
+    return "TODO"
 
 @app.route('/users/<int:user_id>/anime', methods=['POST'])
 def add_anime(user_id):
@@ -119,9 +126,10 @@ def delete_anime(user_id, anime_id):
     db.session.delete(userlist)
     db.session.commit()
 
+    # TODO:  Fix this by fixing path to the template html file
     return redirect(url_for('users.show', user_id=user_id))
 
-
+# TODO:  Remove this
 @app.route('/users/<int:user_id>')
 def users_show(user_id):
     """Show user profile. Display user list."""
@@ -134,6 +142,7 @@ def users_show(user_id):
 def edit_profile():
     """Update profile for current user."""
 
+    # TODO:  Fix below.
     if not get_current_user:
         flash("Access unauthorized", "danger")
 

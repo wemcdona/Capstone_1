@@ -1,3 +1,5 @@
+[//]: # (  TODO:  Put below into some AI to rerender as a standard README.md with installation and usage instructions for POETRY)
+
 https://kitsu.docs.apiary.io/#reference/anime
 title of site: Crunchylist
 Website is used a tracker for anime. It allows people to make a list of the anime that they are watching by pulling it from the anime list of the api, and adding it to their own personal list.
