@@ -68,7 +68,7 @@ def signup():
         return redirect("/")
     
     else:
-        # TODO: Fix this by fixing path to the template html file
+
         return render_template('/signup.html', form=form)
 
 @app.route('/login', methods=["GET", "POST"])
@@ -83,7 +83,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect("/users/home/{user_id}")
+            return redirect(f"/users/{user.id}")
         
         flash("Invalid username or password.", 'danger')
 # TODO: Fix this by fixing path to the template html file
@@ -108,7 +108,7 @@ def add_anime(user_id):
     userlist = Userlist(user=user, anime=anime)
     db.session.add(userlist)
     db.session.commit()
-    return redirect(f'/users/home/{user_id}')
+    return redirect(f'/users/home/{user.id}')
 
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
 def delete_anime(user_id, anime_id):
