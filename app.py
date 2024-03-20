@@ -108,7 +108,7 @@ def add_anime(user_id):
     userlist = Userlist(user=user, anime=anime)
     db.session.add(userlist)
     db.session.commit()
-    return redirect(f'/users/home/{user.id}')
+    return redirect(f'/users/{user.id}')
 
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
 def delete_anime(user_id, anime_id):
@@ -119,7 +119,7 @@ def delete_anime(user_id, anime_id):
     db.session.delete(userlist)
     db.session.commit()
 
-    return redirect(url_for('users.show', user_id=user_id))
+    return redirect(f"/users/{user.id}")
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
