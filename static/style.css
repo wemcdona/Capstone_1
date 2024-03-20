@@ -4,6 +4,9 @@ body {
     color: orange;
     text-shadow: 0 0 5px blue;
 }
+span {
+    color: black
+}
 
 button {
     background-color: blue;

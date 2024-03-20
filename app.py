@@ -121,15 +121,6 @@ def delete_anime(user_id, anime_id):
 
     return redirect(url_for('users.show', user_id=user_id))
 
-
-@app.route('/users/<int:user_id>')
-def users_show(user_id):
-    """Show user profile. Display user list."""
-
-    user = User.query.get_or_404(user_id)
-
-    return render_template('users/show.html', user=user)
-
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
     """Update profile for current user."""
