@@ -83,7 +83,7 @@ def login():
         if user:
             do_login(user)
             flash(f"Hello, {user.username}!", "success")
-            return redirect(f"/users/{user.id}")
+            return redirect(f"/users/home/{user.id}")
         
         flash("Invalid username or password.", 'danger')
 # TODO: Fix this by fixing path to the template html file
@@ -98,6 +98,39 @@ def logout():
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
 
+@app.route('/users/home/<int:user_id>')
+def users_home(user_id):
+    """Display user home page with anime to choose from."""
+
+    user = User.query.get_or_404(user_id)
+
+    # Make a request to the API to get the list of anime
+    response = request.get("https://api.kitsu.io/anime")
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the JSON data from the API
+        data = response.json()
+
+        # Extract the list of anime
+        anime_list = [
+            dict(
+                id=anime["id"],
+                title=anime["attributes"]["titles"],
+                genre=", ".join(anime["attributes"]["genres"]),
+                episode_count=anime["attributes"]["episode_count"],
+                rating=anime["attributes"]["average_rating"],
+            )
+            for anime in data["data"]
+        ]
+
+        # Render the template with the user and anime list
+        return render_template('users/home.html', user=user, anime_list=anime_list)
+    # If the request was not successful, display an error message
+    else:
+        flash("Error: Unable to retrieve anime list from API.", 'danger')
+        return redirect(f'/users/home/{user.id}')
+
 
 @app.route('/users/<int:user_id>/anime', methods=['POST'])
 def add_anime(user_id):
@@ -108,7 +141,7 @@ def add_anime(user_id):
     userlist = Userlist(user=user, anime=anime)
     db.session.add(userlist)
     db.session.commit()
-    return redirect(f'/users/{user.id}')
+    return redirect(f'/users/home/{user.id}')
 
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
 def delete_anime(user_id, anime_id):
@@ -119,7 +152,35 @@ def delete_anime(user_id, anime_id):
     db.session.delete(userlist)
     db.session.commit()
 
-    return redirect(f"/users/{user.id}")
+    return redirect(url_for('users.show', user_id=user_id))
+
+
+@app.route('/users/<int:user_id>/anime', methods=['GET'])
+def users_show(user_id):
+    """Display user anime list."""
+    # get the current user
+    user = User.query.get_or_404(user_id)
+
+    # retrieve the user's anime list from the database
+    userlists = Userlist.query.filter_by(user_id=user_id).all()
+
+    # extract the anime IDs from the userlists
+    anime_ids = [ul.anime_id for ul in userlists]
+
+    # make a request to the API to get the anime data
+    api_url = "https://api.kitsu.io/anime"
+    response = request.get(api_url)
+
+    # check if the request was successful
+    if response.status_code == 200:
+        # parse the JSON data
+        api_data = response.json()
+
+        # filter the data to only include anime with a matching ID
+        anime_data = [a for a in api_data["data"] if a["id"] in anime_ids]
+
+        # return the template with the user and anime data
+        return render_template('users/show.html', user=user, anime=anime_data)
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
