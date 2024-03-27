@@ -1,3 +1,4 @@
+# TODO: Clean up imports
 import os
 
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -86,7 +87,7 @@ def login():
             return redirect(f"/users/home/{user.id}")
         
         flash("Invalid username or password.", 'danger')
-# TODO: Fix this by fixing path to the template html file
+    # TODO: Fix this by fixing path to the template html file
     return render_template('/login.html', form=form)
 
 @app.route('/logout')
@@ -105,6 +106,8 @@ def users_home(user_id):
     user = User.query.get_or_404(user_id)
 
     # Make a request to the API to get the list of anime
+    # TODO: Fix requests.get to properly go against the kitsu.io API.
+    # Hint:  1.  It is not request.get, but it is close. & 2.  The current kitsu.io API is not correct.
     response = request.get("https://api.kitsu.io/anime")
 
     # Check if the request was successful
@@ -113,6 +116,8 @@ def users_home(user_id):
         data = response.json()
 
         # Extract the list of anime
+        # TODO: Fix anime data retrieval once the kitsue.io API GET request is fixed
+        # Hint:  genre, episode_count, rating will need to be fixed :).
         anime_list = [
             dict(
                 id=anime["id"],
@@ -168,6 +173,8 @@ def users_show(user_id):
     anime_ids = [ul.anime_id for ul in userlists]
 
     # make a request to the API to get the anime data
+    # TODO: Fix requests.get to properly go against the kitsu.io API.
+    # Hint:  1.  It is not request.get, but it is close. & 2.  The current kitsu.io API is not correct.
     api_url = "https://api.kitsu.io/anime"
     response = request.get(api_url)
 
@@ -186,6 +193,7 @@ def users_show(user_id):
 def edit_profile():
     """Update profile for current user."""
 
+    # TODO: fix get_current_user.  Hint: It is a function.
     if not get_current_user:
         flash("Access unauthorized", "danger")
 
@@ -209,6 +217,7 @@ def edit_profile():
 def delete_user():
     """Delete user."""
 
+    # TODO: fix get_current_user.  Hint: It is a function.
     if not get_current_user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
