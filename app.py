@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -87,7 +85,6 @@ def login():
             return redirect(f"/users/home/{user.id}")
         
         flash("Invalid username or password.", 'danger')
-# TODO: Fix this by fixing path to the template html file
     return render_template('/login.html', form=form)
 
 @app.route('/logout')
@@ -106,7 +103,7 @@ def users_home(user_id):
     user = User.query.get_or_404(user_id)
 
     # Make a request to the API to get the list of anime
-    response = requests.get("https://api.kitsu.io/anime", timeout=10)
+    response = requests.get("https://kitsu.io/api/edge/anime", timeout=10)
 
     # Check if the request was successful
     if response.status_code == 200:
@@ -121,9 +118,9 @@ def users_home(user_id):
             dict(
                 id=anime["id"],
                 title=anime["attributes"]["titles"],
-                genre=", ".join(anime["attributes"]["genres"]),
-                episode_count=anime["attributes"]["episode_count"],
-                rating=anime["attributes"]["average_rating"],
+                genre=", ".join(anime["relationships"]["genres"]),
+                episode_count=anime["attributes"]["episodeCount"],
+                rating=anime["attributes"]["averageRating"],
             )
             for anime in data["data"]
         ]
@@ -175,10 +172,10 @@ def users_show(user_id):
 def edit_profile():
     """Update profile for current user."""
 
-    if not get_current_user:
+    if not get_current_user():
         flash("Access unauthorized", "danger")
 
-    user = get_current_user
+    user = get_current_user()
     form = UserEditForm(obj=user)
 
     if form.validate_on_submit():
