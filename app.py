@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+import requests
 import pdb
 
 from forms import UserAddForm, LoginForm, UserEditForm
@@ -105,12 +106,15 @@ def users_home(user_id):
     user = User.query.get_or_404(user_id)
 
     # Make a request to the API to get the list of anime
-    response = request.get("https://api.kitsu.io/anime")
+    response = requests.get("https://api.kitsu.io/anime", timeout=10)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Parse the JSON data from the API
-        data = response.json()
+        try:
+            data = response.json()
+        except ValueError:
+            flash("Error: Unable to parse JSON response from API.", 'danger')
+            return redirect(f"/users/home/{user.id}")
 
         # Extract the list of anime
         anime_list = [
@@ -162,25 +166,10 @@ def users_show(user_id):
     user = User.query.get_or_404(user_id)
 
     # retrieve the user's anime list from the database
-    userlists = Userlist.query.filter_by(user_id=user_id).all()
+    userlist = Userlist.query.filter_by(user_id=user_id)
 
-    # extract the anime IDs from the userlists
-    anime_ids = [ul.anime_id for ul in userlists]
-
-    # make a request to the API to get the anime data
-    api_url = "https://api.kitsu.io/anime"
-    response = request.get(api_url)
-
-    # check if the request was successful
-    if response.status_code == 200:
-        # parse the JSON data
-        api_data = response.json()
-
-        # filter the data to only include anime with a matching ID
-        anime_data = [a for a in api_data["data"] if a["id"] in anime_ids]
-
-        # return the template with the user and anime data
-        return render_template('users/show.html', user=user, anime=anime_data)
+    # return template
+    return render_template('users/show.html', user=user, userlist=userlist)
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
