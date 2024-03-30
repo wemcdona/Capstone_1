@@ -195,13 +195,13 @@ def edit_profile():
 def delete_user():
     """Delete user."""
 
-    if not get_current_user:
+    if not get_current_user():
         flash("Access unauthorized.", "danger")
         return redirect("/")
     
     do_logout()
 
-    db.session.delete(get_current_user)
+    db.session.delete(get_current_user())
     db.session.commit()
 
     return redirect("/signup")
