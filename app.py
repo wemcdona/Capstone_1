@@ -58,7 +58,6 @@ def signup():
                 username=form.username.data,
                 password=form.password.data,
                 email=form.email.data,
-                image_url=form.image_url.data or User.image_url.default.arg,
             )
             db.session.commit()
 
@@ -167,10 +166,23 @@ def users_show(user_id):
     user = User.query.get_or_404(user_id)
 
     # retrieve the user's anime list from the database
-    userlist = Userlist.query.filter_by(user_id=user_id)
+    userlists = Userlist.query.filter_by(user_id=user_id).all()
 
-    # return template
-    return render_template('users/show.html', user=user, userlist=userlist)
+    # extract the anime IDs from the userlists
+    anime_ids = [ul.anime_id for ul in userlists]
+
+    # make a request to the API to get the anime data
+    api_url = "https://kitsu.io/api/edge/anime"
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        #parse the JSON data
+        api_data = response.json()
+
+        # filter the data to only include anime with matching ID
+        anime_data = [a for a in api_data["data"] if a["id"] in anime_ids]
+
+        return render_template('users/show.html', user=user, anime=anime_data)
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():
@@ -178,7 +190,6 @@ def edit_profile():
 
     if not get_current_user():
         flash("Access unauthorized", "danger")
-        return redirect("/")
 
     user = get_current_user()
     form = UserEditForm(obj=user)
@@ -187,11 +198,10 @@ def edit_profile():
         if User.authenticate(user.username, form.password.data):
             user.username = form.username.data
             user.email = form.email.data
-            user.image_url = form.image_url.data or "/static/images/default-pic.png"
 
             db.session.commit()
             return redirect(f"/users/{user.id}")
-        
+
         flash("Wrong password, please try again.", 'danger')
 
     return render_template('users/edit.html', form=form, user_id=user.id)
@@ -203,7 +213,7 @@ def delete_user():
     if not get_current_user():
         flash("Access unauthorized.", "danger")
         return redirect("/")
-    
+
     do_logout()
 
     db.session.delete(get_current_user())
@@ -214,7 +224,7 @@ def delete_user():
 @app.route('/')
 def homepage():
     """Homepage:
-    
+
     anon users: show home page with options to log in.
     logged in: display user's personal anime list."""
 
@@ -233,3 +243,5 @@ def handle_integerity_error(e):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
