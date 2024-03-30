@@ -27,7 +27,11 @@ DebugToolbarExtension(app)
 
 # @app.before_request
 def get_current_user():
-    return User.query.get(session[CURR_USER_KEY])
+    """Return the current user from the session."""
+    user_id = session.get(CURR_USER_KEY)
+    if user_id:
+        return User.query.get(user_id)
+    return None
 
 def do_login(user):
     """Log in user."""
@@ -174,6 +178,7 @@ def edit_profile():
 
     if not get_current_user():
         flash("Access unauthorized", "danger")
+        return redirect("/")
 
     user = get_current_user()
     form = UserEditForm(obj=user)
