@@ -129,6 +129,8 @@ def users_home(user_id):
         ]
 
         # Render the template with the user and anime list
+        # TODO:  HINT:  Any variables and functions provided here will be usable by the templates.
+        #  Anything not specified here will not work in the template.
         return render_template('users/home.html', user=user, anime_list=anime_list)
     # If the request was not successful, display an error message
     else:
@@ -182,6 +184,8 @@ def users_show(user_id):
         # filter the data to only include anime with matching ID
         anime_data = [a for a in api_data["data"] if a["id"] in anime_ids]
 
+        # TODO:  HINT:  Any variables and functions provided here will be usable by the templates.
+        #  Anything not specified here will not work in the template.
         return render_template('users/show.html', user=user, anime=anime_data)
 
 @app.route('/users/profile', methods=["GET", "POST"])
