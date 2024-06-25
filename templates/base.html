@@ -25,23 +25,13 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
-        <img src="" alt="logo">
-        <span>Crunchylist</span>
+{#        <span>Crunchylist</span>#}
       </a>
     </div>
     <ul class="nav navbar-nav navbar-right">
-      {% if request.endpoint != None %}
-      <li>
-        <form class="navbar-form navbar-right" action="/users">
-          <input name="q" class="form-control" placeholder="Search Crunchylist" id="search">
-          <button class="btn btn-default">
-            <span class="fa fa-search"></span>
-          </button>
-        </form>
-      </li>
-      {% endif %}
       {% if not get_current_user %}
       <li><a href="/signup">Sign up</a></li>
+          <span> / </span>
       <li><a href="/login">Log in</a></li>
       {% else %}
       <li>

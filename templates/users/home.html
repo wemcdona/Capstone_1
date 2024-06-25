@@ -5,14 +5,13 @@
 
         <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
             <div class="card user-card">
-            <a href="/users/{{ get_current_user.user.id }}" class="card-link">
-                <img src="{{ get_current_user.user.image_url }}" alt="Image for {{ get_current_user.user.username }}" class="card-image">
-                <p>@{{ get_current_user.user.username }}</p>
+            <a href="/users/{{ get_current_user().user.id }}" class="card-link">
+                <p>@{{ get_current_user().user.username }}</p>
             </a>
             </div>
         </aside>
         <div>
-            <a href="{{ url_for('users.show', user_id=get_current_user.user.id) }}">My Anime</a>
+            <a href="{{ url_for('users.show', user_id=get_current_user().user.id) }}">My Anime</a>
         </div>
         <div>
             <h3>Pick Your Anime!</h3>
