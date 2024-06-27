@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, InputRequired, Length, Email
 from sqlalchemy.exc import IntegrityError
 import requests
-from forms import UserAddForm, LoginForm
+from forms import UserAddForm, LoginForm, UserEditForm
 from models import db, User, Anime, Userlist
 
 app = Flask(__name__)
@@ -28,6 +28,10 @@ def get_current_user():
     if user_id:
         return User.query.get(user_id)
     return None
+
+@app.context_processor
+def inject_user():
+    return dict(get_current_user=get_current_user())
 
 def do_login(user):
     """Log in user."""
