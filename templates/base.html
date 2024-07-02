@@ -25,7 +25,7 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
-{#        <span>Crunchylist</span>#}
+        {# <span>Crunchylist</span> #}
       </a>
     </div>
     <ul class="nav navbar-nav navbar-right">
@@ -35,8 +35,8 @@
       <li><a href="/login">Log in</a></li>
       {% else %}
       <li>
-        <a href="/users/home/{{ get_current_user.id }}">
-          <img src="{{ get_current_user.image_url }}" alt="{{ get_current_user.username }}">
+        <a href="/users/home/{{ get_current_user().id }}">
+          <img src="{{ get_current_user().image_url }}" alt="{{ get_current_user().username }}">
         </a>
       </li>
       <li><a href="/logout">Log out</a></li>

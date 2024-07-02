@@ -31,7 +31,7 @@ def get_current_user():
 
 @app.context_processor
 def inject_user():
-    return dict(get_current_user=get_current_user())
+    return dict(get_current_user=get_current_user)
 
 def do_login(user):
     """Log in user."""
@@ -74,6 +74,7 @@ def login():
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data, form.password.data)
+        print(f"Authenticated user: {user}") # Debugging line
 
         if user:
             do_login(user)
@@ -81,6 +82,7 @@ def login():
             return redirect(f"/users/home/{user.id}")
 
         flash("Invalid username or password.", 'danger')
+
     return render_template('login.html', form=form)
 
 @app.route('/logout')
