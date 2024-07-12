@@ -28,3 +28,4 @@ License
 This project is licensed under the MIT License.
 
 https://kitsu.docs.apiary.io/#reference/anime
+
