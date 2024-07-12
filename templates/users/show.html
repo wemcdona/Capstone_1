@@ -7,20 +7,20 @@
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Genre</th>
                         <th>Episode Count</th>
-                        <th>Rating</th>
                         <th>Remove</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for anime in user.anime %}
+                    {% for anime in anime %}
                     <tr>
                         <td>{{ anime.title }}</td>
-                        <td>{{ anime.genre }}</td>
                         <td>{{ anime.episode_count }}</td>
-                        <td>{{ anime.rating }}</td>
-                        <td><a href="{{ url_for('remove_anime', anime_id=anime.id) }}" class="btn btn-danger">Remove</a></td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_anime', user_id=user.id, anime_id=anime.id) }}">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

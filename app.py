@@ -125,15 +125,20 @@ def add_anime(user_id):
     """Add anime to user's list."""
     user = User.query.get_or_404(user_id)
     anime_ids = request.form.getlist('anime_ids')  # Use getlist to fetch multiple selected anime
+    print(f"Selected anime IDs: {anime_ids}") # Debugging line
 
     for anime_id in anime_ids:
-        userlist = Userlist(user_id=user.id, anime_id=anime_id)
-        db.session.add(userlist)
+        # Check if the anime already exists in the user's list to prevent duplicates
+        existing_entry = Userlist.query.filter_by(user_id=user.id, anime_id=anime_id).first()
+        if not existing_entry:
+            userlist = Userlist(user_id=user.id, anime_id=anime_id)
+            db.session.add(userlist)
+            print(f"Added anime ID {anime_id} to user ID {user.id}") # Debugging line
     
     db.session.commit()
     return redirect(f'/users/home/{user.id}')
 
-@app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['DELETE'])
+@app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['POST'])
 def delete_anime(user_id, anime_id):
     """Delete anime from user's list."""
     user = User.query.get_or_404(user_id)
@@ -147,9 +152,17 @@ def delete_anime(user_id, anime_id):
 def users_show(user_id):
     """Display user anime list."""
     user = User.query.get_or_404(user_id)
-
     userlists = Userlist.query.filter_by(user_id=user_id).all()
     anime_ids = [ul.anime_id for ul in userlists]
+    print(f"User {user.id} anime IDs: {anime_ids}") #Debugging line
+
+    anime_list = []
+    if anime_ids:
+        anime_list = Anime.query.filter(Anime.id.in_(anime_ids)).all()
+        for anime in anime_list:
+            print(f"Anime ID: {anime.id}, Title: {anime.title}") # Debugging line
+    
+    return render_template('users/show.html', user=user, anime=anime_list)
 
     api_url = "https://kitsu.io/api/edge/anime"
     response = requests.get(api_url)
