@@ -5,6 +5,7 @@ blinker
 cffi
 Click
 decorator
+email_validator
 Faker
 Flask
 Flask-Bcrypt
@@ -26,6 +27,7 @@ ptyprocess
 pycparser
 Pygments
 python-dateutil
+requests
 simplegeneric
 six
 SQLAlchemy
