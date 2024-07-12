@@ -63,7 +63,7 @@ def signup():
             return render_template('signup.html', form=form)
 
         do_login(user)
-        return redirect("/users/home/{user.id}")
+        return redirect(f"/users/home/{user.id}")
 
     return render_template('signup.html', form=form)
 
@@ -74,7 +74,7 @@ def login():
 
     if form.validate_on_submit():
         user = User.authenticate(form.username.data, form.password.data)
-        print(f"Authenticated user: {user}") # Debugging line
+        print(f"Authenticated user: {user}")  # Debugging line
 
         if user:
             do_login(user)
@@ -109,27 +109,27 @@ def users_home(user_id):
         anime_list = [
             dict(
                 id=anime["id"],
-                title=anime["attributes"]["titles"],
-                genre=", ".join(anime["relationships"]["genres"]),
+                title=anime["attributes"]["titles"].get("en") or anime["attributes"]["titles"].get("en_jp"),
                 episode_count=anime["attributes"]["episodeCount"],
-                rating=anime["attributes"]["averageRating"],
             )
             for anime in data["data"]
         ]
 
-        return render_template('users/home.html', user=user, anime_list=anime_list)
+        return render_template('users/home.html', user=user, anime=anime_list)
     else:
         flash("Error: Unable to retrieve anime list from API.", 'danger')
         return redirect(f'/users/home/{user.id}')
-
+    
 @app.route('/users/<int:user_id>/anime', methods=['POST'])
 def add_anime(user_id):
     """Add anime to user's list."""
     user = User.query.get_or_404(user_id)
-    anime_id = request.form.get('anime_id')
-    anime = Anime.query.get(anime_id)
-    userlist = Userlist(user=user, anime=anime)
-    db.session.add(userlist)
+    anime_ids = request.form.getlist('anime_ids')  # Use getlist to fetch multiple selected anime
+
+    for anime_id in anime_ids:
+        userlist = Userlist(user_id=user.id, anime_id=anime_id)
+        db.session.add(userlist)
+    
     db.session.commit()
     return redirect(f'/users/home/{user.id}')
 
@@ -138,7 +138,7 @@ def delete_anime(user_id, anime_id):
     """Delete anime from user's list."""
     user = User.query.get_or_404(user_id)
     anime = Anime.query.get_or_404(anime_id)
-    userlist = Userlist.query.filter(Userlist.user == user.id, Userlist.anime == anime.id).first()
+    userlist = Userlist.query.filter_by(user_id=user.id, anime_id=anime.id).first()
     db.session.delete(userlist)
     db.session.commit()
     return redirect(url_for('users_show', user_id=user_id))
@@ -164,6 +164,7 @@ def edit_profile():
     """Update profile for current user."""
     if not get_current_user():
         flash("Access unauthorized", "danger")
+        return redirect('/')
 
     user = get_current_user()
     form = UserEditForm(obj=user)
