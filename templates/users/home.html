@@ -1,41 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Crunchylist</h1>
-    <div class="row">
-
-        <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
-            <div class="card user-card">
-                <a href="/users/{{ get_current_user().id }}" class="card-link">
-                    <p>@{{ get_current_user().username }}</p>
-                </a>
-            </div>
-        </aside>
-        <div>
-            <a href="{{ url_for('users_show', user_id=get_current_user().id) }}">My Anime</a>
+<h1 class="title-centered">Crunchylist</h1>
+<div class="row">
+    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+        <div class="card user-card">
+            <a href="/users/{{ get_current_user().id }}" class="card-link">
+                <p>@{{ get_current_user().username }}</p>
+            </a>
         </div>
-        <div>
-            <h3>Pick Your Anime!</h3>
-            <form method="POST" action="{{ url_for('add_anime', user_id=get_current_user().id) }}">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Episode Count</th>
-                            <th>Select</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for anime in anime %}
-                        <tr>
-                            <td>{{ anime.title }}</td>
-                            <td>{{ anime.episode_count }}</td>
-                            <td><input type="checkbox" name="anime_ids" value="{{ anime.id }}"></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <button type="submit" class="btn btn-primary">Add Selected Anime</button>
-            </form>
-        </div>
+    </aside>
+    <div>
+        <a href="{{ url_for('users_show', user_id=get_current_user().id) }}">My Anime</a>
     </div>
+    <div>
+        <h3>Pick Your Anime!</h3>
+        <form method="POST" action="{{ url_for('add_anime', user_id=get_current_user().id) }}">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Episode Count</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for anime in anime %}
+                    <tr>
+                        <td>{{ anime.title }}</td>
+                        <td>{{ anime.episode_count }}</td>
+                        <td><input type="checkbox" name="anime_ids" value="{{ anime.id }}"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Add Selected Anime</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

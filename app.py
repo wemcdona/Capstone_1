@@ -125,7 +125,6 @@ def add_anime(user_id):
     """Add anime to user's list."""
     user = User.query.get_or_404(user_id)
     anime_ids = request.form.getlist('anime_ids')  # Use getlist to fetch multiple selected anime
-    print(f"Selected anime IDs: {anime_ids}") # Debugging line
 
     for anime_id in anime_ids:
         # Check if the anime already exists in the user's list to prevent duplicates
@@ -133,9 +132,9 @@ def add_anime(user_id):
         if not existing_entry:
             userlist = Userlist(user_id=user.id, anime_id=anime_id)
             db.session.add(userlist)
-            print(f"Added anime ID {anime_id} to user ID {user.id}") # Debugging line
     
     db.session.commit()
+    flash('Selected Anime Successfully Added!', 'success')
     return redirect(f'/users/home/{user.id}')
 
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['POST'])

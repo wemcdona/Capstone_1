@@ -1,50 +1,66 @@
-button {
-    background-color: blue;
-    color: white;
-    border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-}
-
-button:active {
-    background-color: darkblue;
-}
-
-a {
-    color: blue;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-table {
-    background-color: lightgrey;
-    border-collapse: collapse;
-}
-
-th, td{
-    border: 1px solid black;
-    padding: 8px;
-}
-
-th {
-    font-weight: bold;
-    text-align: center;
-}
-
-td {
-    text-align: left;
+body {
+    background-color: #B0B0B0; /* Medium gray tone */
 }
 
 .banner {
-    background-image: url('../images/crunchylist_banner.jpeg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100px;
-    position: relative;
-    font-family: 'Looney', sans-serif;
-    color: rgba(255, 0, 255, 0.5);
-    text-shadow: 1px 1px 2px red, 0 0 1em black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px; /* Adjust height as needed */
+    width: 100%; /* Full width */
+    background-color: #B0B0B0; /* Medium gray tone */
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 2.5rem; /* Adjust font size as needed */
+    position: relative; /* Ensures the navbar is positioned correctly */
+}
+
+.navbar {
+    position: absolute;
+    top: 150px; /* Same height as the banner */
+    right: 0;
+    width: auto;
+    padding-right: 20px;
+}
+
+h1.title-centered {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    text-shadow: 2px 2px 4px #000000;
+    margin: 20px 0;
+}
+
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+.centered-container h1 {
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    text-shadow: 2px 2px 4px #000000;
+    margin-bottom: 20px;
+}
+
+.btn-blue {
+    background-color: #007BFF; /* Bootstrap primary blue color */
+    color: white;
+    border: none;
+}
+
+.btn-blue:hover {
+    background-color: #0056b3; /* Darker shade of blue for hover */
+    color: white;
+}
+
+.join-message {
+    font-family: 'Roboto', sans-serif;
+    color: red;
+    text-shadow: 2px 2px 4px #000000;
 }

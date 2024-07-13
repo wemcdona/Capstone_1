@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="home-hero">
+    <div class="centered-container">
         <h1>Crunchylist Anime Tracker</h1>
-        <h4>New to Crunchylist?</h4>
-        <p>Sign up and join the Crunchylist Clan!</p>
-        <a href="/signup" class="btn btn-primary">Sign up</a>
-        <a href="/login" class="btn btn-primary">Login</a>
+        <p>Welcome to Crunchylist, your ultimate anime tracking tool. Please log in or sign up to continue.</p>
+        <div class="form-container">
+            <a href="/signup" class="btn btn-primary">Sign up</a>
+            <a href="/login" class="btn btn-primary">Login</a>
+        </div>
     </div>
 {% endblock %}
