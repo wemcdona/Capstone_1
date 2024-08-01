@@ -1,9 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
 from flask_debugtoolbar import DebugToolbarExtension
-from wtforms import StringField, PasswordField
-from wtforms.validators import DataRequired, InputRequired, Length, Email
 from sqlalchemy.exc import IntegrityError
 import requests
 from forms import UserAddForm, LoginForm, UserEditForm
@@ -162,14 +158,6 @@ def users_show(user_id):
             print(f"Anime ID: {anime.id}, Title: {anime.title}") # Debugging line
     
     return render_template('users/show.html', user=user, anime=anime_list)
-
-    api_url = "https://kitsu.io/api/edge/anime"
-    response = requests.get(api_url)
-
-    if response.status_code == 200:
-        api_data = response.json()
-        anime_data = [a for a in api_data["data"] if a["id"] in anime_ids]
-        return render_template('users/show.html', user=user, anime=anime_data)
 
 @app.route('/users/profile', methods=["GET", "POST"])
 def edit_profile():

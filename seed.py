@@ -1,6 +1,6 @@
 import requests
 from app import db
-from models import User, Userlist, Episode, Anime
+from models import Episode, Anime
 
 # Drop and create all tables
 db.drop_all()
