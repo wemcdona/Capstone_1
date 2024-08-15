@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Crunchylist</title>
 
   <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
   <script src="https://unpkg.com/jquery"></script>
@@ -13,18 +12,16 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
   <link rel="stylesheet" href="/static/style.css">
   <link rel="shortcut icon" href="/static/favicon.ico">
-  <!-- Add Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
-  <div class="banner">
+  <div class="banner text-center">
     Crunchylist
   </div>
   <nav class="navbar navbar-expand">
     <div class="container-fluid">
       <div class="navbar-header">
-        <!-- <a href="/" class="navbar-brand">Crunchylist</a> -->
+        <a href="/" class="navbar-brand">Crunchylist</a>
       </div>
       <ul class="nav navbar-nav navbar-right">
         {% if not get_current_user() %}
@@ -37,14 +34,20 @@
       </ul>
     </div>
   </nav>
+
+  <div class="container mt-3">
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="row justify-content-center">
+        <div class="col-md-6">  <!-- Center and limit width -->
+          <div class="alert alert-{{ category }} text-center">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
   <div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
     {% block content %}{% endblock %}
   </div>
 </body>
