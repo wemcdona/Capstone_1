@@ -64,3 +64,29 @@ h1.title-centered {
     color: red;
     text-shadow: 2px 2px 4px #000000;
 }
+
+.username {
+    font-family: 'Roboto', sans-serif;
+    color: #ff0000;
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 1.2em;
+    background-color: #B0B0B0;
+    border: none;
+}
+
+/* Remove the white border and padding */
+.user-card {
+    background-color: transparent; /* Ensure the background matches the body */
+    border: none; /* Remove any border */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.username {
+    font-family: 'Roboto', sans-serif;
+    color: #ff0000; /* Red color */
+    text-shadow: 2px 2px 4px #000000; /* Darker shadow */
+    font-size: 1.2em;
+    background-color: transparent; /* Ensure the background matches the body */
+    margin: 0;
+}
