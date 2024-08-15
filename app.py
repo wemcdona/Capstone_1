@@ -91,6 +91,10 @@ def logout():
 @app.route('/users/home/<int:user_id>')
 def users_home(user_id):
     """Display user home page with anime to choose from."""
+    if get_current_user().id != user_id:
+        # Return a 404 error if the logged-in user tries to access another user's page
+        return render_template('404.html'), 404
+    
     user = User.query.get_or_404(user_id)
 
     response = requests.get("https://kitsu.io/api/edge/anime", timeout=10)
@@ -136,6 +140,10 @@ def add_anime(user_id):
 @app.route('/users/<int:user_id>/anime/<int:anime_id>', methods=['POST'])
 def delete_anime(user_id, anime_id):
     """Delete anime from user's list."""
+    if get_current_user().id != user_id:
+        # Return a 404 error if the logged-in user tries to delete another user's anime
+        return render_template('404.html'), 404
+    
     user = User.query.get_or_404(user_id)
     anime = Anime.query.get_or_404(anime_id)
     userlist = Userlist.query.filter_by(user_id=user.id, anime_id=anime.id).first()
@@ -146,16 +154,17 @@ def delete_anime(user_id, anime_id):
 @app.route('/users/<int:user_id>/anime', methods=['GET'])
 def users_show(user_id):
     """Display user anime list."""
+    if get_current_user().id != user_id:
+        # Return a 404 error if the logged-in user tries to access another user's page
+        return render_template('404.html'), 404
+    
     user = User.query.get_or_404(user_id)
     userlists = Userlist.query.filter_by(user_id=user_id).all()
     anime_ids = [ul.anime_id for ul in userlists]
-    print(f"User {user.id} anime IDs: {anime_ids}") #Debugging line
 
     anime_list = []
     if anime_ids:
         anime_list = Anime.query.filter(Anime.id.in_(anime_ids)).all()
-        for anime in anime_list:
-            print(f"Anime ID: {anime.id}, Title: {anime.title}") # Debugging line
     
     return render_template('users/show.html', user=user, anime=anime_list)
 
