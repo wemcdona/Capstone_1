@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="anime-detail">
+    <h1>{{ anime.title }}</h1>
+    <div class="anime-cover">
+        <img src="{{ anime.cover_image }}" alt="{{ anime.title }}" class="img-fluid">
+    </div>
+    <div class="anime-description">
+        <p>{{ anime.description }}</p>
+    </div>
+</div>
+{% endblock %}

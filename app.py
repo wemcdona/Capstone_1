@@ -120,6 +120,31 @@ def users_home(user_id):
         flash("Error: Unable to retrieve anime list from API.", 'danger')
         return redirect(f'/users/home/{user.id}')
     
+@app.route('/anime/<int:anime_id>')
+def anime_detail(anime_id):
+    """Display detailed information about a specific anime."""
+    
+    # Fetch anime details from the API
+    response = requests.get(f"https://kitsu.io/api/edge/anime/{anime_id}", timeout=10)
+    
+    if response.status_code == 200:
+        try:
+            data = response.json()['data']
+            anime = {
+                'id': data['id'],
+                'title': data['attributes']['titles'].get('en') or data['attributes']['titles'].get('en_jp'),
+                'description': data['attributes']['synopsis'],
+                'cover_image': data['attributes']['posterImage']['original'],
+            }
+        except (ValueError, KeyError):
+            flash("Error: Unable to parse JSON response from API.", 'danger')
+            return redirect(url_for('users_home', user_id=get_current_user().id))
+
+        return render_template('anime_detail.html', anime=anime)
+    else:
+        flash("Error: Unable to retrieve anime details from API.", 'danger')
+        return redirect(url_for('users_home', user_id=get_current_user().id))
+
 @app.route('/users/<int:user_id>/anime', methods=['POST'])
 def add_anime(user_id):
     """Add anime to user's list."""

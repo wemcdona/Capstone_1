@@ -90,3 +90,22 @@ h1.title-centered {
     background-color: transparent; /* Ensure the background matches the body */
     margin: 0;
 }
+
+.anime-detail {
+    text-align: center;
+    margin: 20px auto;
+}
+
+.anime-cover img {
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.anime-description {
+    font-size: 1.1em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+

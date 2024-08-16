@@ -24,7 +24,7 @@
                 <tbody>
                     {% for anime in anime %}
                     <tr>
-                        <td>{{ anime.title }}</td>
+                        <td><a href="{{ url_for('anime_detail', anime_id=anime.id) }}">{{ anime.title }}</a></td>
                         <td>{{ anime.episode_count }}</td>
                         <td><input type="checkbox" name="anime_ids" value="{{ anime.id }}"></td>
                     </tr>
