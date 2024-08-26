@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="title-centered">My Anime</h1>
+<h1>My Anime</h1>
 <div class="row">
     <div class="col-md-8">
         <table class="table">
             <thead>
                 <tr>
                     <th>Title</th>
+                    <th>Genre</th>
                     <th>Episode Count</th>
                     <th>Remove</th>
                 </tr>
@@ -14,7 +15,10 @@
             <tbody>
                 {% for anime in anime %}
                 <tr>
-                    <td>{{ anime.title }}</td>
+                    <td>
+                        <a href="{{ url_for('anime_detail', anime_id=anime.id) }}">{{ anime.title }}</a>
+                    </td>
+                    <td>{{ anime.genre }}</td>
                     <td>{{ anime.episode_count }}</td>
                     <td>
                         <form method="POST" action="{{ url_for('delete_anime', user_id=user.id, anime_id=anime.id) }}">
